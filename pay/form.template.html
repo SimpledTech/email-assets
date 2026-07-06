@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Simpled — Payment Request</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F7F5F2; --card:#FFFFFF; --ink:#16140F; --muted:#7C766C; --line:#EAE4DA;
+  --sand:#D2B7A1; --sand-deep:#A6855F; --sand-soft:#F3E9DF; --gold:#BF935B;
+  --radius:16px; --shadow:0 20px 60px -24px rgba(22,20,15,.28), 0 2px 8px -2px rgba(22,20,15,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg);
+  -webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden;position:relative;min-height:100dvh;
+}
+/* aurora glow field */
+.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;filter:blur(60px);opacity:.7}
+.aurora span{position:absolute;border-radius:50%;mix-blend-mode:multiply;will-change:transform}
+.aurora .b1{width:52vw;height:52vw;left:-14vw;top:-16vw;background:radial-gradient(circle at 30% 30%,#EBDCCB,transparent 68%);animation:drift1 20s ease-in-out infinite}
+.aurora .b2{width:46vw;height:46vw;right:-12vw;top:8vh;background:radial-gradient(circle at 60% 40%,#E7D6C4,transparent 66%);animation:drift2 26s ease-in-out infinite}
+.aurora .b3{width:40vw;height:40vw;left:20vw;bottom:-18vw;background:radial-gradient(circle at 50% 50%,#F0E4D6,transparent 70%);animation:drift3 30s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(6vw,4vh) scale(1.06)}}
+@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-5vw,5vh) scale(1.08)}}
+@keyframes drift3{0%,100%{transform:translate(0,0)}50%{transform:translate(4vw,-4vh) scale(1.05)}}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+.wrap{position:relative;z-index:2;max-width:640px;margin:0 auto;padding:38px 20px 64px}
+.brand{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;margin-bottom:30px}
+.brand img{height:38px;width:auto;opacity:0;transform:translateY(-6px);animation:rise .7s .05s ease forwards}
+.eyebrow{font-family:'Inter Tight';font-weight:600;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.hero-h{font-family:'Inter Tight';font-weight:700;letter-spacing:-.03em;font-size:clamp(26px,6vw,34px);line-height:1.08}
+.hero-sub{color:var(--muted);font-size:15px;max-width:420px}
+.greet{display:inline-flex;align-items:center;gap:8px;margin-top:4px;padding:7px 14px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.7);backdrop-filter:blur(6px);font-size:13.5px}
+.greet b{font-weight:600}
+.greet .dot{width:7px;height:7px;border-radius:50%;background:#3fbf7f;box-shadow:0 0 0 4px rgba(63,191,127,.15)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 22px 24px}
+.sec-t{font-family:'Inter Tight';font-weight:600;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:22px 2px 12px;display:flex;align-items:center;gap:10px}
+.sec-t:first-of-type{margin-top:2px}
+.sec-t::after{content:"";flex:1;height:1px;background:var(--line)}
+
+.field{margin-bottom:14px;opacity:0;transform:translateY(10px);animation:rise .55s ease forwards}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{display:block;font-size:13px;font-weight:500;margin-bottom:7px}
+label .req{color:var(--gold)}
+.hint{font-size:11.5px;color:var(--muted);margin-top:5px}
+input,select,textarea{
+  width:100%;font-family:inherit;font-size:15px;color:var(--ink);background:#fff;
+  border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;transition:border-color .18s,box-shadow .18s,background .18s;
+}
+input::placeholder,textarea::placeholder{color:#b7b0a5}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 4px rgba(191,147,91,.14)}
+textarea{resize:vertical;min-height:84px}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' stroke='%237C766C' stroke-width='2'%3E%3Cpath d='M3 5l4 4 4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:38px;cursor:pointer}
+
+/* amount + currency combo */
+.amount-row{display:grid;grid-template-columns:1fr 130px;gap:12px;align-items:end}
+.amount-wrap{position:relative}
+.amount-wrap .sym{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-weight:600;color:var(--sand-deep);pointer-events:none;font-size:15px}
+#amount{padding-left:34px;font-variant-numeric:tabular-nums;font-weight:600;letter-spacing:.01em}
+
+/* segmented (payment type) */
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:var(--sand-soft);border-radius:12px;padding:5px}
+.seg label{margin:0;cursor:pointer}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg span{display:block;text-align:center;padding:10px;border-radius:9px;font-size:14px;font-weight:600;color:var(--muted);transition:.18s}
+.seg input:checked+span{background:#fff;color:var(--ink);box-shadow:0 2px 8px -2px rgba(22,20,15,.14)}
+
+.filepick{display:flex;align-items:center;gap:12px;border:1.5px dashed var(--line);border-radius:12px;padding:13px 14px;cursor:pointer;transition:.18s;background:#fff}
+.filepick:hover{border-color:var(--sand)}
+.filepick svg{flex:none;color:var(--sand-deep)}
+.filepick .ftxt{font-size:13.5px;color:var(--muted)}
+.filepick input{display:none}
+
+.err{border-color:#e0736a !important;box-shadow:0 0 0 4px rgba(224,115,106,.13) !important}
+
+.submit{
+  margin-top:24px;width:100%;border:none;cursor:pointer;font-family:'Inter Tight';font-weight:600;font-size:16px;
+  color:#fff;background:var(--ink);border-radius:13px;padding:16px;letter-spacing:.01em;position:relative;overflow:hidden;
+  transition:transform .12s,box-shadow .2s;box-shadow:0 12px 30px -12px rgba(22,20,15,.5)
+}
+.submit:hover{transform:translateY(-1px);box-shadow:0 16px 36px -12px rgba(22,20,15,.55)}
+.submit:active{transform:translateY(0)}
+.submit[disabled]{opacity:.6;cursor:default;transform:none}
+.submit .spin{display:none;width:17px;height:17px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-3px;margin-right:8px}
+.submit.loading .spin{display:inline-block}
+.legal{text-align:center;font-size:11.5px;color:var(--muted);margin-top:16px;line-height:1.5}
+
+/* success overlay */
+.done{position:fixed;inset:0;z-index:20;background:rgba(247,245,242,.82);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:24px}
+.done.show{display:flex;animation:fade .4s ease}
+.done-card{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);max-width:400px;width:100%;text-align:center;padding:38px 28px}
+.check{width:70px;height:70px;margin:0 auto 18px;border-radius:50%;background:var(--sand-soft);display:grid;place-items:center}
+.check svg{width:34px;height:34px;color:var(--sand-deep);stroke-dasharray:48;stroke-dashoffset:48;animation:draw .6s .15s ease forwards}
+.done-card h2{font-family:'Inter Tight';font-weight:700;font-size:23px;letter-spacing:-.02em;margin-bottom:8px}
+.done-card p{color:var(--muted);font-size:14.5px;margin-bottom:6px}
+.done-ref{display:inline-block;margin-top:12px;font-family:'Inter Tight';font-weight:600;background:var(--sand-soft);color:var(--sand-deep);padding:8px 16px;border-radius:999px;letter-spacing:.03em}
+.done-card a{display:inline-block;margin-top:22px;font-weight:600;color:var(--ink);font-size:14px;text-decoration:none;border-bottom:2px solid var(--gold);padding-bottom:2px}
+
+@keyframes rise{to{opacity:1;transform:none}}
+@keyframes sp{to{transform:rotate(360deg)}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@media (max-width:480px){.amount-row{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}.wrap{padding-top:26px}}
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}.field,.brand img{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="aurora"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
+<div class="grain"></div>
+
+<div class="wrap">
+  <div class="brand">
+    <img src="https://raw.githubusercontent.com/SimpledTech/email-assets/main/simpled-logo-sand.png" alt="Simpled">
+    <div class="eyebrow">Finance · Payment Request</div>
+    <h1 class="hero-h">Request a payment</h1>
+    <p class="hero-sub">Submit the details below. It routes to your manager, then to the CEO, then to Finance — you're notified at every step.</p>
+    <div class="greet"><span class="dot"></span>Signed in as&nbsp;<b>__NAME__</b>&nbsp;·&nbsp;__ROLE__</div>
+  </div>
+
+  <form class="card" id="f" novalidate>
+    <input type="hidden" id="token" value="__TOKEN__">
+
+    <div class="sec-t">Amount</div>
+    <div class="field amount-row" style="animation-delay:.06s">
+      <div class="amount-wrap">
+        <label for="amount">Amount <span class="req">*</span></label>
+        <span class="sym" id="sym">£</span>
+        <input id="amount" inputmode="decimal" autocomplete="off" placeholder="0">
+      </div>
+      <div>
+        <label for="currency">Currency <span class="req">*</span></label>
+        <select id="currency">
+          <option value="GBP" data-sym="£">GBP £</option>
+          <option value="USD" data-sym="$">USD $</option>
+          <option value="EUR" data-sym="€">EUR €</option>
+          <option value="RIAL" data-sym="﷼">Rial ﷼</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="sec-t">What &amp; who</div>
+    <div class="field" style="animation-delay:.1s">
+      <label for="description">Description <span class="req">*</span></label>
+      <textarea id="description" placeholder="What is this payment for? Be specific — this is what approvers read."></textarea>
+    </div>
+    <div class="field grid2" style="animation-delay:.14s">
+      <div>
+        <label>Payment type <span class="req">*</span></label>
+        <div class="seg">
+          <label><input type="radio" name="ptype" value="Official" checked><span>Official</span></label>
+          <label><input type="radio" name="ptype" value="Personal"><span>Personal</span></label>
+        </div>
+      </div>
+      <div>
+        <label for="receiver">Receiver's name <span class="req">*</span></label>
+        <input id="receiver" autocomplete="off" placeholder="Who gets paid">
+      </div>
+    </div>
+    <div class="field" style="animation-delay:.18s">
+      <label for="account">Account number / payment destination <span class="req">*</span></label>
+      <input id="account" autocomplete="off" placeholder="IBAN, card, wallet or account details">
+    </div>
+
+    <div class="sec-t">Optional</div>
+    <div class="field grid2" style="animation-delay:.22s">
+      <div>
+        <label for="vendor">Vendor name</label>
+        <input id="vendor" autocomplete="off" placeholder="Supplier / company">
+      </div>
+      <div>
+        <label for="due">Due date</label>
+        <input id="due" type="date">
+      </div>
+    </div>
+    <div class="field" style="animation-delay:.26s">
+      <label for="link">Payment link or invoice link</label>
+      <input id="link" inputmode="url" autocomplete="off" placeholder="https://…">
+    </div>
+    <div class="field" style="animation-delay:.3s">
+      <label for="project">Related project / service</label>
+      <input id="project" autocomplete="off" placeholder="e.g. Website, Ads, Logistics">
+    </div>
+    <div class="field" style="animation-delay:.34s">
+      <label for="notes">Extra notes</label>
+      <textarea id="notes" placeholder="Anything else the approvers should know" style="min-height:64px"></textarea>
+    </div>
+    <div class="field" style="animation-delay:.38s">
+      <label for="file">Receipt / invoice attachment</label>
+      <label class="filepick" for="file">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21.44 11.05l-9.19 9.19a5 5 0 01-7.07-7.07l9.19-9.19a3 3 0 014.24 4.24l-9.2 9.19a1 1 0 01-1.41-1.41l8.49-8.49"/></svg>
+        <span class="ftxt" id="ftxt">Attach a receipt or invoice (optional)</span>
+      </label>
+      <input id="file" type="file" accept="image/*,.pdf">
+    </div>
+
+    <button class="submit" id="go" type="submit"><span class="spin"></span><span class="lbl">Submit payment request</span></button>
+    <p class="legal">Your request is logged and visible to you under <b>My Requests</b>.<br>Approvers see only what you enter here.</p>
+  </form>
+</div>
+
+<div class="done" id="done">
+  <div class="done-card">
+    <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6"/></svg></div>
+    <h2>Request submitted</h2>
+    <p id="doneMsg">It's on its way to your manager for confirmation.</p>
+    <p>You'll get a Telegram update at every stage.</p>
+    <div class="done-ref" id="doneRef">PR-…</div><br>
+    <a href="__MINE_URL__">View my requests →</a>
+  </div>
+</div>
+
+<script>
+const SUBMIT_URL="__SUBMIT_URL__", UPLOAD_URL="__UPLOAD_URL__";
+const $=s=>document.querySelector(s);
+const amount=$("#amount"), cur=$("#currency"), sym=$("#sym");
+function symbolFor(v){return {GBP:"£",USD:"$",EUR:"€",RIAL:"﷼"}[v]||"";}
+function group(n){return n.replace(/\B(?=(\d{3})+(?!\d))/g,",");}
+let rawAmount="";
+amount.addEventListener("input",()=>{
+  let noDot = cur.value==="RIAL";
+  let v=amount.value.replace(/[^\d.]/g,"");
+  if(noDot) v=v.replace(/\./g,"");
+  const parts=v.split(".");
+  parts[0]=group(parts[0].replace(/^0+(?=\d)/,""));
+  if(parts[1]!==undefined) parts[1]=parts[1].slice(0,2);
+  rawAmount=v.replace(/,/g,"");
+  amount.value=parts.slice(0,2).join(".");
+});
+cur.addEventListener("change",()=>{sym.textContent=symbolFor(cur.value);amount.dispatchEvent(new Event("input"));});
+sym.textContent=symbolFor(cur.value);
+
+const file=$("#file"), ftxt=$("#ftxt");
+file.addEventListener("change",()=>{ ftxt.textContent = file.files[0] ? file.files[0].name : "Attach a receipt or invoice (optional)"; });
+
+function mark(el,bad){el.classList.toggle("err",bad);}
+$("#f").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const desc=$("#description"), recv=$("#receiver"), acc=$("#account");
+  let bad=false;
+  const amtNum=parseFloat(rawAmount||"0");
+  mark(amount,!(amtNum>0)); bad=bad||!(amtNum>0);
+  mark(desc,!desc.value.trim()); bad=bad||!desc.value.trim();
+  mark(recv,!recv.value.trim()); bad=bad||!recv.value.trim();
+  mark(acc,!acc.value.trim()); bad=bad||!acc.value.trim();
+  if(bad){ const f=document.querySelector(".err"); f&&f.scrollIntoView({behavior:"smooth",block:"center"}); return; }
+
+  const go=$("#go"); go.classList.add("loading"); go.disabled=true; $(".lbl").textContent="Submitting…";
+  let attachment_url="";
+  try{
+    if(file.files[0] && UPLOAD_URL && UPLOAD_URL.indexOf("__")<0){
+      const fd=new FormData(); fd.append("file",file.files[0]);
+      const ur=await fetch(UPLOAD_URL,{method:"POST",body:fd}).then(r=>r.json()).catch(()=>null);
+      if(ur && (ur.url||ur.publicUrl)) attachment_url=ur.url||ur.publicUrl;
+    }
+    const payload={
+      token:$("#token").value, amount:amtNum, currency:cur.value,
+      description:desc.value.trim(), payment_type:document.querySelector('input[name=ptype]:checked').value,
+      account_number:acc.value.trim(), receiver_name:recv.value.trim(),
+      payment_link:$("#link").value.trim(), vendor_name:$("#vendor").value.trim(),
+      due_date:$("#due").value||null, project:$("#project").value.trim(),
+      extra_notes:$("#notes").value.trim(), attachment_url
+    };
+    const res=await fetch(SUBMIT_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)}).then(r=>r.json());
+    if(res && res.ok){
+      $("#doneRef").textContent=res.request_ref||"PR-…";
+      $("#doneMsg").textContent = res.next_stage==="ceo"
+        ? "It's on its way to the CEO for approval." : "It's on its way to your manager for confirmation.";
+      $("#done").classList.add("show");
+    } else { throw new Error((res&&res.error)||"failed"); }
+  }catch(err){
+    go.classList.remove("loading"); go.disabled=false; $(".lbl").textContent="Submit payment request";
+    alert("Could not submit: "+(err.message||err)+". Please try again.");
+  }
+});
+</script>
+</body>
+</html>
