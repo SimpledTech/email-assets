@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Simpled — My Payment Requests</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F7F5F2;--card:#FFFFFF;--ink:#16140F;--muted:#7C766C;--line:#EAE4DA;--sand:#D2B7A1;--sand-deep:#A6855F;--sand-soft:#F3E9DF;--gold:#BF935B;--shadow:0 20px 60px -24px rgba(22,20,15,.28),0 2px 8px -2px rgba(22,20,15,.06)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.5;min-height:100dvh;overflow-x:hidden}
+.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;filter:blur(60px);opacity:.6}
+.aurora span{position:absolute;border-radius:50%;mix-blend-mode:multiply}
+.aurora .b1{width:52vw;height:52vw;left:-16vw;top:-18vw;background:radial-gradient(circle,#EBDCCB,transparent 68%);animation:d1 22s ease-in-out infinite}
+.aurora .b2{width:44vw;height:44vw;right:-12vw;top:20vh;background:radial-gradient(circle,#E7D6C4,transparent 66%);animation:d2 28s ease-in-out infinite}
+@keyframes d1{0%,100%{transform:translate(0,0)}50%{transform:translate(5vw,4vh) scale(1.06)}}
+@keyframes d2{0%,100%{transform:translate(0,0)}50%{transform:translate(-4vw,5vh) scale(1.07)}}
+.wrap{position:relative;z-index:2;max-width:640px;margin:0 auto;padding:34px 18px 60px}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.top img{height:30px}
+.newbtn{font-family:'Inter Tight';font-weight:600;font-size:13.5px;color:#fff;background:var(--ink);border-radius:11px;padding:10px 15px;text-decoration:none;box-shadow:0 10px 24px -12px rgba(22,20,15,.5);transition:transform .12s}
+.newbtn:hover{transform:translateY(-1px)}
+.head{margin:22px 2px 20px}
+.eyebrow{font-family:'Inter Tight';font-weight:600;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.head h1{font-family:'Inter Tight';font-weight:700;letter-spacing:-.03em;font-size:clamp(24px,6vw,30px);margin-top:4px}
+.head p{color:var(--muted);font-size:14px;margin-top:4px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:17px 18px;margin-bottom:13px;opacity:0;transform:translateY(10px);animation:rise .5s ease forwards}
+.item-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:7px}
+.amt{font-family:'Inter Tight';font-weight:700;font-size:20px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.ref{font-size:11.5px;color:var(--muted);font-family:'Inter Tight';letter-spacing:.03em;margin-top:2px}
+.desc{font-size:14px;color:#3b3831;margin:2px 0 10px;overflow-wrap:anywhere}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.meta b{color:#57524a;font-weight:600}
+.badge{flex:none;font-size:11.5px;font-weight:600;padding:6px 11px;border-radius:999px;white-space:nowrap;letter-spacing:.01em}
+.b-wait{background:#FBF1DF;color:#9a6b16}
+.b-mid{background:#EAF0FB;color:#2f5aa8}
+.b-fin{background:#EDE7FB;color:#6a45c0}
+.b-ready{background:#E4F3EC;color:#1f7d52}
+.b-paid{background:#DFF3E6;color:#12703f}
+.b-dec{background:#FBE7E4;color:#b53b30}
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty svg{opacity:.5;margin-bottom:14px}
+@keyframes rise{to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}.item{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="aurora"><span class="b1"></span><span class="b2"></span></div>
+<div class="wrap">
+  <div class="top">
+    <img src="https://raw.githubusercontent.com/SimpledTech/email-assets/main/simpled-logo-sand.png" alt="Simpled">
+    <a class="newbtn" href="__NEWURL__">+ New request</a>
+  </div>
+  <div class="head">
+    <div class="eyebrow">Finance · My Requests</div>
+    <h1>__NAME__'s requests</h1>
+    <p>__COUNT__ — you're notified on Telegram at every stage.</p>
+  </div>
+  __ROWS__
+</div>
+</body>
+</html>
